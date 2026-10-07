@@ -38,6 +38,14 @@
     {
       "path": "synfig-studio/src/synfigapp/main.cpp",
       "gitBlobSHA": "4c5a3fb108f77fe95f0812931c84d6231a1a0a9e"
+    },
+    {
+      "path": "synfig-core/src/tool/definitions.h",
+      "gitBlobSHA": "37d7a5241a15adda1a73160b83e59cf00377f104"
+    },
+    {
+      "path": "synfig-core/src/tool/main.cpp",
+      "gitBlobSHA": "22046fe69f6568ac3aca47a6dd64a6b771326d3a"
     }
   ],
   "appImage": {
