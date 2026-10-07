@@ -46,6 +46,14 @@
     {
       "path": "synfig-core/src/tool/main.cpp",
       "gitBlobSHA": "22046fe69f6568ac3aca47a6dd64a6b771326d3a"
+    },
+    {
+      "path": "synfig-studio/src/gui/splash.cpp",
+      "gitBlobSHA": "8d0e54e9ef6067674f2d261d5243e8ae62fbe2d6"
+    },
+    {
+      "path": "synfig-studio/src/gui/mainwindow.cpp",
+      "gitBlobSHA": "00c3d868c26e9adefcc8508528985242cbc922a8"
     }
   ],
   "appImage": {

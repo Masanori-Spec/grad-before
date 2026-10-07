@@ -1,5 +1,5 @@
 """Actual Synfig GUI File Import, native save, fresh reopen/save, then CLI rendering."""
-import hashlib,importlib.util,json,os,pathlib,shutil,subprocess,time,xml.etree.ElementTree as ET
+import hashlib,importlib.util,json,os,pathlib,re,shutil,subprocess,time,xml.etree.ElementTree as ET
 ROOT=pathlib.Path(__file__).resolve().parents[1];OUT=ROOT/'evidence';WORK=ROOT/'.native'
 spec=importlib.util.spec_from_file_location('native_runtime',ROOT/'scripts/native-runtime.py');rt=importlib.util.module_from_spec(spec);spec.loader.exec_module(rt)
 progress=[]
@@ -20,6 +20,12 @@ def activate(window):
     command('xdotool','windowsize',window,'1400','900')
 def key(value):command('xdotool','key','--clearmodifiers',value);time.sleep(.15)
 def type_text(value):command('xdotool','type','--clearmodifiers','--delay','1',value)
+def properties(window):
+    return subprocess.run(['xprop','-id',window,'_NET_WM_WINDOW_TYPE','_NET_WM_PID','WM_CLASS','WM_NAME'],capture_output=True,text=True,timeout=5).stdout
+def diagnose(stem):
+    subprocess.run(['scrot',str(OUT/(stem+'.png'))],capture_output=True,timeout=10)
+    listing=[{'id':window,'name':subprocess.run(['xdotool','getwindowname',window],capture_output=True,text=True).stdout.strip(),'properties':properties(window),'geometry':subprocess.run(['xdotool','getwindowgeometry','--shell',window],capture_output=True,text=True).stdout} for window in windows('.*')]
+    (OUT/(stem+'-windows.json')).write_text(json.dumps({'activeWindow':subprocess.run(['xdotool','getactivewindow'],capture_output=True,text=True).stdout.strip(),'windows':listing},indent=2)+'\n')
 def saved(path):
     try:return path.exists() and path.stat().st_size>100 and ET.parse(path).getroot().tag=='canvas'
     except ET.ParseError:return False
@@ -49,15 +55,27 @@ def validate(record,case):
         for g in record['gradients']:assert g['stops']==expected,(case,g)
 def launch(input_path,profile,log_path):
     log=log_path.open('w');p=subprocess.Popen([rt.runtime()['launcher'],str(input_path)],cwd=ROOT,env=rt.gui_environment(profile),stdout=log,stderr=subprocess.STDOUT)
+    observed={}
     def find():
         assert p.poll() is None,'Synfig exited during launch'
+        managed={int(value,16) for value in re.findall(r'0x[0-9a-fA-F]+',command('xprop','-root','_NET_CLIENT_LIST'))}
         candidates=windows('Synfig|GradBefore')
+        eligible=[]
         for window in candidates:
+            props=properties(window);observed[window]=props
+            (OUT/(log_path.stem+'-window-observations.json')).write_text(json.dumps(observed,indent=2)+'\n')
+            pid=re.search(r'_NET_WM_PID\(CARDINAL\) = (\d+)',props)
+            if int(window) not in managed or '_NET_WM_WINDOW_TYPE_NORMAL' not in props or not pid or int(pid.group(1))!=p.pid:continue
             geometry=command('xdotool','getwindowgeometry','--shell',window);values=dict(line.split('=',1) for line in geometry.splitlines() if '=' in line)
-            if int(values.get('WIDTH',0))>=650 and int(values.get('HEIGHT',0))>=400:return window
+            if int(values.get('WIDTH',0))>=650 and int(values.get('HEIGHT',0))>=400:
+                eligible.append((window,props,geometry))
+        assert len(eligible)<=1,'Multiple qualifying native windows; selection is ambiguous'
+        if eligible:
+            window,props,geometry=eligible[0];note('select-managed-normal-window',window=window,process=p.pid,properties=props,geometry=geometry);return window
         return None
     try:window=wait(find,'Synfig main window missing',60);activate(window);time.sleep(1);return p,log,window
     except Exception:
+        diagnose(log_path.stem+'-launch-failure')
         log.flush();log.close()
         if p.poll() is None:
             p.terminate()
@@ -91,11 +109,7 @@ def main():
             render(file,case+'-native');render(reopened,case+'-reopened-native');records[case]={'saved':first,'reopened':second,'sourceRemovedBeforeReopen':True};(OUT/'native-structure.json').write_text(json.dumps(records,indent=2)+'\n')
         (OUT/'native-gui-result.json').write_text(json.dumps({'synfigVersion':'1.5.5','cases':records,'actions':progress,'scope':'Actual GUI SVG import into editable native groups/gradients, native save, fresh process reopen/save with source removed, then unchanged official CLI rendering. Synthetic fixtures only.'},indent=2)+'\n')
     except Exception:
-        subprocess.run(['scrot',str(OUT/'native-failure.png')],capture_output=True)
-        listing=[]
-        for window in windows('.*'):
-            listing.append({'id':window,'name':subprocess.run(['xdotool','getwindowname',window],capture_output=True,text=True).stdout.strip(),'geometry':subprocess.run(['xdotool','getwindowgeometry','--shell',window],capture_output=True,text=True).stdout})
-        (OUT/'native-windows.json').write_text(json.dumps(listing,indent=2)+'\n');raise
+        diagnose('native-failure');raise
     finally:
         if active and active.poll() is None:active.terminate()
         if active_log:active_log.close()
