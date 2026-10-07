@@ -33,6 +33,13 @@ def wait_dialog(pattern,pid):
     window,props=wait(find,'Expected native dialog missing: '+pattern)
     assert command('xdotool','getactivewindow').strip()==window,'Native dialog does not own focus'
     note('native-dialog',window=window,process=pid,properties=props);return window
+def accept_dialog(window,stem):
+    assert command('xdotool','getactivewindow').strip()==window,'Native chooser lost focus'
+    geometry=command('xdotool','getwindowgeometry','--shell',window);values=dict(line.split('=',1) for line in geometry.splitlines() if '=' in line);width=int(values['WIDTH']);height=int(values['HEIGHT']);assert 600<=width<=1600 and 300<=height<=1000
+    # The observed GTK chooser places its explicit accept button at bottom right.
+    # Use client-relative coordinates; do not rely on Return having a default response.
+    x,y=width-45,height-25;command('scrot',str(OUT/(stem+'-chooser-ready.png')));note('native-chooser-accept',window=window,x=x,y=y,coordinateSpace='client',screenshot=stem+'-chooser-ready.png')
+    command('xdotool','mousemove','--window',window,str(x),str(y));command('xdotool','click','1')
 def diagnose(stem):
     subprocess.run(['scrot',str(OUT/(stem+'.png'))],capture_output=True,timeout=10)
     listing=[{'id':window,'name':subprocess.run(['xdotool','getwindowname',window],capture_output=True,text=True).stdout.strip(),'properties':properties(window),'geometry':subprocess.run(['xdotool','getwindowgeometry','--shell',window],capture_output=True,text=True).stdout} for window in windows('.*')]
@@ -41,10 +48,8 @@ def saved(path):
     try:return path.exists() and path.stat().st_size>100 and ET.parse(path).getroot().tag=='canvas'
     except ET.ParseError:return False
 def save_as(path,pid):
-    assert not path.exists();key('ctrl+shift+s');dialog=wait_dialog(r'^Please choose a file name \(GradBefore native import fixture\)$',pid);key('ctrl+l');type_text(str(path));key('Return')
-    try:wait(lambda:saved(path),'Native save missing',8)
-    except AssertionError:
-        assert dialog in windows('.*'),'Save did not produce a native document';assert command('xdotool','getactivewindow').strip()==dialog;key('alt+s');wait(lambda:saved(path),'Native Save As did not complete',20)
+    assert not path.exists();key('ctrl+shift+s');dialog=wait_dialog(r'^Please choose a file name \(GradBefore native import fixture\)$',pid);key('ctrl+l');type_text(str(path));accept_dialog(dialog,path.stem+'-save')
+    wait(lambda:saved(path),'Native Save As did not complete',30)
     wait(lambda:dialog not in windows('.*'),'Save dialog remained open');note('native-save-as',file=path.name,sha256=hashlib.sha256(path.read_bytes()).hexdigest())
 def native_record(path):
     root=ET.parse(path).getroot();layers=list(root.iter('layer'));types=[n.get('type') for n in layers]
@@ -113,7 +118,7 @@ def main():
         for case,source in cases.items():
             area=WORK/'cases'/case;area.mkdir(parents=True,exist_ok=True);svg=area/'source.svg';shutil.copyfile(source,svg);blank=area/'blank.sif';shutil.copyfile(ROOT/'fixtures/blank.sif',blank)
             active,active_log,window=launch(blank,area/'profile',OUT/(case+'-gui.log'));note('launch-blank',case=case,window=window)
-            key('ctrl+i');dialog=wait_dialog('^Please select files$',active.pid);key('ctrl+l');type_text(str(svg));key('Return');wait(lambda:dialog not in windows('.*'),'Native Import dialog did not close');time.sleep(1)
+            key('ctrl+i');dialog=wait_dialog('^Please select files$',active.pid);key('ctrl+l');type_text(str(svg));accept_dialog(dialog,case+'-import');wait(lambda:dialog not in windows('.*'),'Native Import dialog did not close');time.sleep(1)
             command('scrot',str(OUT/(case+'-imported.png')));file=OUT/(case+'.sif');save_as(file,active.pid);first=native_record(file);validate(first,case);quit_app(active,active_log);active=None;active_log=None
             # The saved editable SIF must stand alone, with the actual imported source unavailable.
             svg.rename(area/'source.svg.disabled');active,active_log,window=launch(file,area/'reopen-profile',OUT/(case+'-reopen.log'));reopened=OUT/(case+'-reopened.sif');save_as(reopened,active.pid);second=native_record(reopened);validate(second,case);assert first['gradients']==second['gradients'] and first['layerTypes']==second['layerTypes'];command('scrot',str(OUT/(case+'-reopened.png')));quit_app(active,active_log);active=None;active_log=None
