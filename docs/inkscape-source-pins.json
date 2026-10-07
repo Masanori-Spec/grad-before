@@ -1,0 +1,47 @@
+{
+  "package": "inkscape",
+  "version": "1.1.2-3ubuntu1",
+  "architecture": "amd64",
+  "officialPackagesIndex": "https://archive.ubuntu.com/ubuntu/dists/jammy/universe/binary-amd64/Packages.xz",
+  "debURL": "https://archive.ubuntu.com/ubuntu/pool/universe/i/inkscape/inkscape_1.1.2-3ubuntu1_amd64.deb",
+  "debBytes": 17764314,
+  "debSHA256": "691f10db58b4bccd130f83fa1bfaa453412fe042369ad4b9bc90e6aac4104b4a",
+  "files": [
+    {
+      "path": "synfig_output.py",
+      "sha256": "6716f4e4b93205513c39b870acfdf9b3d59ef18966a2579a5361d028b79c1f36",
+      "bytes": 47561
+    },
+    {
+      "path": "synfig_prepare.py",
+      "sha256": "f3ce0c1503a80c621524a3adbbeda6824be25bc5274519089fdacce1d8068e8f",
+      "bytes": 14162
+    },
+    {
+      "path": "synfig_fileformat.py",
+      "sha256": "2884a4e631a7296843c5d8fda5087ee662865b2aa487d1ffcbf3c2f9096a98eb",
+      "bytes": 6842
+    },
+    {
+      "path": "synfig_output.inx",
+      "sha256": "b6319b37a6410fbd1e3db2dc86a6fca83665aa47b6647f2bfd1ed5b4c228f2e2",
+      "bytes": 791
+    },
+    {
+      "path": "inkex/extensions.py",
+      "sha256": "5b4a35508d2b2fef9d984594b5addb374ff289ee85ae3bd6360cb249a39d966a",
+      "bytes": 14194
+    },
+    {
+      "path": "inkex/elements/_meta.py",
+      "sha256": "f725558c19a1ab6c72352d2aa21089e06dde094aaecf7ea57b6126cb5e005fdc",
+      "bytes": 4915
+    },
+    {
+      "path": "inkex/elements/_svg.py",
+      "sha256": "69c869c81097570dcf34a579392b72da9b8a2ca2d180fbca22005c0648ce7510",
+      "bytes": 7583
+    }
+  ],
+  "scope": "Test-only official Ubuntu package source identities; no vendor source or binary included in the product archive"
+}

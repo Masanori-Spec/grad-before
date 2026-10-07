@@ -1,5 +1,5 @@
 """Compare real native/browser pixels with fixed semantic samples and deliberate mutations."""
-import hashlib,json,pathlib
+import hashlib,json,pathlib,sys
 from PIL import Image
 ROOT=pathlib.Path(__file__).resolve().parents[1];OUT=ROOT/'evidence'
 def image(name):
@@ -8,8 +8,8 @@ def image(name):
 def digest(im):return hashlib.sha256(im.tobytes()).hexdigest()
 def difference(a,b):return sum(x!=y for x,y in zip(a.getdata(),b.getdata()))
 def main():
+    assert sys.argv[1:] in ([],['--native-only']),'Unknown pixel-check option'
     native={name:image(name+'-native.png') for name in ['original','repaired','manual-control','altered-stop']}
-    browser={name:image(name+'-browser.png') for name in native}
     samples=[(100,100),(280,100),(460,100)]
     for name in native:
         reopened=image(name+'-reopened-native.png');assert native[name].tobytes()==reopened.tobytes(),name+' changed on fresh native reopen/save'
@@ -21,6 +21,10 @@ def main():
         r,g,b,a=native['manual-control'].getpixel(point);assert g>180 and r<100 and b<100 and a==255,'Expected green center in linear panel'
     r,g,b,a=native['manual-control'].getpixel(samples[2]);assert r>180 and g<100 and b<100 and a==255,'Expected red radial center'
     assert len(set(native['manual-control'].getdata()))>100,'Native control was not a meaningful multicolor gradient render'
+    native_report={'nativeRGBA':{n:digest(im) for n,im in native.items()},'nativeOriginalDifferentPixels':difference(native['original'],native['manual-control']),'nativeAlteredStopDifferentPixels':difference(native['altered-stop'],native['manual-control']),'nativeSamples':{n:[im.getpixel(p) for p in samples] for n,im in native.items()},'repairedManualExactEquality':True,'allFreshReopensExactEquality':True,'scope':'Strict actual Synfig GUI/save/fresh-reopen render comparisons; browser semantics remains a separate gate.'}
+    (OUT/'native-pixel-result.json').write_text(json.dumps(native_report,indent=2)+'\n')
+    if sys.argv[1:]==['--native-only']:return
+    browser={name:image(name+'-browser.png') for name in native}
     assert browser['original'].tobytes()==browser['repaired'].tobytes()==browser['manual-control'].tobytes(),'Order-only repair changed browser SVG pixels'
     assert difference(browser['altered-stop'],browser['manual-control'])>10000,'Browser stop mutation escaped the pixel oracle'
     comparisons=json.loads((OUT/'optimizers/comparison.json').read_text());competitors=[]

@@ -2,7 +2,9 @@
 
 ## Status
 
-Source tests and the literal order-only fixture comparison pass locally. Eight actual optimizer configurations have been executed on the fixed fixture and retain forward references. Actual original-SVG GUI import/save has reproduced the missing gradients in editable native vector contents. Complete repaired/control import, fresh reopen, native render, Inkscape alternative and browser semantic acceptance remain **pending**. No UI is built before that result.
+All 44 transformer tests and eight archive checks pass. The [R11 native component](https://github.com/Masanori-Spec/grad-before/actions/runs/37611567887) is independently accepted: four actual GUI imports, eight native saves across fresh processes, eight clean exits and eight CLI renders. Repaired and manually ordered RGBA bytes match exactly, all four fresh reopens preserve pixels, the original differs in 76,800 pixels and the altered stop differs in 70,949. The native control contains 659 colors with the expected green/green/red center samples. The 87-member raw artifact is 2,201,745 bytes, SHA-256 `251e7296b4c73b4cd6cafb5a6cabe8de0ee1dd3af385e703e374f6dae1689bc8`.
+
+Eight optimizer configurations retain forward references on this fixture. The installed Inkscape comparison stopped on its first gradient-count assumption; the browser stage was therefore skipped. Full feasibility and UI development still require independent browser semantics and a complete honest alternative comparison.
 
 The [first hosted attempt](https://github.com/Masanori-Spec/grad-before/actions/runs/37597540596) passed all 44 source tests, then stopped because the official AppImage loader lacked `libfuse.so.2`. Adding that runtime library allowed the [second attempt](https://github.com/Masanori-Spec/grad-before/actions/runs/37598970037) to expose the format mismatch: this older AppImage ignores `--appimage-extract` and starts its GUI. Both stopped before the intended native test.
 
@@ -52,7 +54,9 @@ There is no cross-engine full-pixel equality claim: native gamma and rendering c
 
 ## Inkscape alternative
 
-A separate bounded step executes the unmodified officially installed Inkscape SIF exporter on original and manual-control SVGs, in a disposable profile. It records actual version and extension-file hashes. Both SIFs must contain three editable gradients and render identically through the pinned Synfig CLI. This is an explicit alternative, not an attempt to claim that all other tools fail. Its execution remains pending.
+A separate bounded step executes the unmodified officially installed Inkscape SIF exporter on both unchanged original and manual-control SVGs, in a disposable profile. Its normal `SynfigExport.effect` invokes `SynfigPrep.effect`, so preprocessing is included. The archive SHA-256 is recorded provenance from the official Ubuntu package index and was checked against the downloaded package during source inspection. Each hosted comparison checks the installed package version and seven exporter/preprocessor/element-class file hashes before execution.
+
+The R11 original output contained four regions and no gradients. The inspected exporter dispatches gradient registration only through `SvgDocumentElement`; ordinary `Defs` has a different class. The recursive resolver’s existence alone therefore did not prove full-pipeline support. The comparison now retains both actual SIFs and native renders, recording process statuses, layer/stop tables, image hashes, center samples, pixel equality and meaningful color counts. It reports whether the bounded fixture checks are met; it does not require or imply a successful alternative conversion. Process, parse or render failures still fail the comparison, and the report must complete for both cases. The main GradBefore repaired/manual/fault and browser oracles remain strict and separate. No vendor code or input is patched to improve the comparator result.
 
 ## Distribution
 
