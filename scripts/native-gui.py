@@ -22,6 +22,17 @@ def key(value):command('xdotool','key','--clearmodifiers',value);time.sleep(.15)
 def type_text(value):command('xdotool','type','--clearmodifiers','--delay','1',value)
 def properties(window):
     return subprocess.run(['xprop','-id',window,'_NET_WM_WINDOW_TYPE','_NET_WM_PID','WM_CLASS','WM_NAME'],capture_output=True,text=True,timeout=5).stdout
+def wait_dialog(pattern,pid):
+    def find():
+        matches=[]
+        for window in windows(pattern):
+            props=properties(window);owner=re.search(r'_NET_WM_PID\(CARDINAL\) = (\d+)',props)
+            if '_NET_WM_WINDOW_TYPE_DIALOG' in props and owner and int(owner.group(1))==pid:matches.append((window,props))
+        assert len(matches)<=1,'Ambiguous native dialog'
+        return matches[0] if matches else None
+    window,props=wait(find,'Expected native dialog missing: '+pattern)
+    assert command('xdotool','getactivewindow').strip()==window,'Native dialog does not own focus'
+    note('native-dialog',window=window,process=pid,properties=props);return window
 def diagnose(stem):
     subprocess.run(['scrot',str(OUT/(stem+'.png'))],capture_output=True,timeout=10)
     listing=[{'id':window,'name':subprocess.run(['xdotool','getwindowname',window],capture_output=True,text=True).stdout.strip(),'properties':properties(window),'geometry':subprocess.run(['xdotool','getwindowgeometry','--shell',window],capture_output=True,text=True).stdout} for window in windows('.*')]
@@ -29,12 +40,12 @@ def diagnose(stem):
 def saved(path):
     try:return path.exists() and path.stat().st_size>100 and ET.parse(path).getroot().tag=='canvas'
     except ET.ParseError:return False
-def save_as(path):
-    assert not path.exists();key('ctrl+shift+s');wait(lambda:windows('Save'),'Native Save As dialog missing');key('ctrl+l');type_text(str(path));key('Return')
+def save_as(path,pid):
+    assert not path.exists();key('ctrl+shift+s');dialog=wait_dialog(r'^Please choose a file name \(GradBefore native import fixture\)$',pid);key('ctrl+l');type_text(str(path));key('Return')
     try:wait(lambda:saved(path),'Native save missing',8)
     except AssertionError:
-        assert windows('Save'),'Save did not produce a native document';key('alt+s');wait(lambda:saved(path),'Native Save As did not complete',20)
-    wait(lambda:not windows('Save'),'Save dialog remained open');note('native-save-as',file=path.name,sha256=hashlib.sha256(path.read_bytes()).hexdigest())
+        assert dialog in windows('.*'),'Save did not produce a native document';assert command('xdotool','getactivewindow').strip()==dialog;key('alt+s');wait(lambda:saved(path),'Native Save As did not complete',20)
+    wait(lambda:dialog not in windows('.*'),'Save dialog remained open');note('native-save-as',file=path.name,sha256=hashlib.sha256(path.read_bytes()).hexdigest())
 def native_record(path):
     root=ET.parse(path).getroot();layers=list(root.iter('layer'));types=[n.get('type') for n in layers]
     assert 'svg_layer' not in types and not any(t in ('import','imagemagick','ffmpeg') for t in types),'Imported document retained external/image layer'
@@ -102,10 +113,10 @@ def main():
         for case,source in cases.items():
             area=WORK/'cases'/case;area.mkdir(parents=True,exist_ok=True);svg=area/'source.svg';shutil.copyfile(source,svg);blank=area/'blank.sif';shutil.copyfile(ROOT/'fixtures/blank.sif',blank)
             active,active_log,window=launch(blank,area/'profile',OUT/(case+'-gui.log'));note('launch-blank',case=case,window=window)
-            key('ctrl+i');wait(lambda:windows('Import'),'Native Import dialog missing');key('ctrl+l');type_text(str(svg));key('Return');wait(lambda:not windows('Import'),'Native Import dialog did not close');time.sleep(1)
-            command('scrot',str(OUT/(case+'-imported.png')));file=OUT/(case+'.sif');save_as(file);first=native_record(file);validate(first,case);quit_app(active,active_log);active=None;active_log=None
+            key('ctrl+i');dialog=wait_dialog('^Please select files$',active.pid);key('ctrl+l');type_text(str(svg));key('Return');wait(lambda:dialog not in windows('.*'),'Native Import dialog did not close');time.sleep(1)
+            command('scrot',str(OUT/(case+'-imported.png')));file=OUT/(case+'.sif');save_as(file,active.pid);first=native_record(file);validate(first,case);quit_app(active,active_log);active=None;active_log=None
             # The saved editable SIF must stand alone, with the actual imported source unavailable.
-            svg.rename(area/'source.svg.disabled');active,active_log,window=launch(file,area/'reopen-profile',OUT/(case+'-reopen.log'));reopened=OUT/(case+'-reopened.sif');save_as(reopened);second=native_record(reopened);validate(second,case);assert first['gradients']==second['gradients'] and first['layerTypes']==second['layerTypes'];command('scrot',str(OUT/(case+'-reopened.png')));quit_app(active,active_log);active=None;active_log=None
+            svg.rename(area/'source.svg.disabled');active,active_log,window=launch(file,area/'reopen-profile',OUT/(case+'-reopen.log'));reopened=OUT/(case+'-reopened.sif');save_as(reopened,active.pid);second=native_record(reopened);validate(second,case);assert first['gradients']==second['gradients'] and first['layerTypes']==second['layerTypes'];command('scrot',str(OUT/(case+'-reopened.png')));quit_app(active,active_log);active=None;active_log=None
             render(file,case+'-native');render(reopened,case+'-reopened-native');records[case]={'saved':first,'reopened':second,'sourceRemovedBeforeReopen':True};(OUT/'native-structure.json').write_text(json.dumps(records,indent=2)+'\n')
         (OUT/'native-gui-result.json').write_text(json.dumps({'synfigVersion':'1.5.5','cases':records,'actions':progress,'scope':'Actual GUI SVG import into editable native groups/gradients, native save, fresh process reopen/save with source removed, then unchanged official CLI rendering. Synthetic fixtures only.'},indent=2)+'\n')
     except Exception:

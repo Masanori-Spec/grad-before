@@ -58,6 +58,14 @@
     {
       "path": "synfig-core/src/synfig/canvas.h",
       "gitBlobSHA": "f30f0a2c2692edfd6a4a56936b7a20600cbc55af"
+    },
+    {
+      "path": "synfig-studio/src/gui/canvasview.cpp",
+      "gitBlobSHA": "1a6b7bc7edd3f570faa42f80de752b106c573d79"
+    },
+    {
+      "path": "synfig-studio/src/gui/instance.cpp",
+      "gitBlobSHA": "53b616978cd979b9be1f1b2784b80275e68fd2d4"
     }
   ],
   "appImage": {
