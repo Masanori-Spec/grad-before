@@ -54,6 +54,10 @@
     {
       "path": "synfig-studio/src/gui/mainwindow.cpp",
       "gitBlobSHA": "00c3d868c26e9adefcc8508528985242cbc922a8"
+    },
+    {
+      "path": "synfig-core/src/synfig/canvas.h",
+      "gitBlobSHA": "f30f0a2c2692edfd6a4a56936b7a20600cbc55af"
     }
   ],
   "appImage": {
