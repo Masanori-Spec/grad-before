@@ -19,7 +19,7 @@ jobs:
         run: |
           npm ci --ignore-scripts --no-audit --no-fund
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends xvfb xauth openbox xdotool scrot python3-pil python3-lxml python3-numpy python3-tinycss2 python3-cssselect scour inkscape
+          sudo apt-get install -y --no-install-recommends libfuse2 xvfb xauth openbox xdotool scrot python3-pil python3-lxml python3-numpy python3-tinycss2 python3-cssselect scour inkscape
       - name: Source and literal fixture checks
         run: |
           set -euo pipefail
@@ -29,7 +29,7 @@ jobs:
       - name: Verify official Synfig and optimizer test assets
         run: |
           python3 scripts/prepare-native.py
-          dpkg-query -W inkscape scour python3-scour python3-pil openbox xvfb xdotool > evidence/native-packages.txt
+          dpkg-query -W libfuse2 inkscape scour python3-scour python3-pil openbox xvfb xdotool > evidence/native-packages.txt
       - name: Run actual optimizer configurations
         run: node scripts/compare-optimizers.mjs
       - name: Actual GUI import, save, fresh reopen and native render
