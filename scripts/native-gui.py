@@ -49,10 +49,11 @@ def diagnose(stem):
 def saved(path):
     try:return path.exists() and path.stat().st_size>100 and ET.parse(path).getroot().tag=='canvas'
     except ET.ParseError:return False
-def save_as(path,pid):
-    assert not path.exists();key('ctrl+shift+s');dialog=wait_dialog(r'^Please choose a file name \(GradBefore native import fixture\)$',pid);key('ctrl+l');type_text(str(path));accept_dialog(dialog,path.stem+'-save')
+def save_as(path,pid,opened_canvas_name):
+    title='^'+re.escape('Please choose a file name ('+opened_canvas_name+')')+'$'
+    assert not path.exists();key('ctrl+shift+s');dialog=wait_dialog(title,pid);key('ctrl+l');key('ctrl+a');type_text(str(path));accept_dialog(dialog,path.stem+'-save')
     wait(lambda:saved(path),'Native Save As did not complete',30)
-    wait(lambda:dialog not in windows('.*'),'Save dialog remained open');note('native-save-as',file=path.name,sha256=hashlib.sha256(path.read_bytes()).hexdigest())
+    wait(lambda:dialog not in windows('.*'),'Save dialog remained open');native_name=ET.parse(path).getroot().findtext('name');assert native_name==path.name,'Native saved canvas name does not match its explicit destination';note('native-save-as',file=path.name,canvasName=native_name,sha256=hashlib.sha256(path.read_bytes()).hexdigest())
 def native_record(path):
     root=ET.parse(path).getroot();layers=list(root.iter('layer'));types=[n.get('type') for n in layers]
     assert 'svg_layer' not in types and not any(t in ('import','imagemagick','ffmpeg') for t in types),'Imported document retained external/image layer'
@@ -121,9 +122,9 @@ def main():
             area=WORK/'cases'/case;area.mkdir(parents=True,exist_ok=True);svg=area/'source.svg';shutil.copyfile(source,svg);blank=area/'blank.sif';shutil.copyfile(ROOT/'fixtures/blank.sif',blank)
             active,active_log,window=launch(blank,area/'profile',OUT/(case+'-gui.log'));note('launch-blank',case=case,window=window)
             key('ctrl+i');dialog=wait_dialog('^Please select files$',active.pid);key('ctrl+l');type_text(str(svg));accept_dialog(dialog,case+'-import');wait(lambda:dialog not in windows('.*'),'Native Import dialog did not close');time.sleep(1)
-            command('scrot',str(OUT/(case+'-imported.png')));file=OUT/(case+'.sif');save_as(file,active.pid);first=native_record(file);validate(first,case);quit_app(active,active_log);active=None;active_log=None
+            command('scrot',str(OUT/(case+'-imported.png')));file=OUT/(case+'.sif');save_as(file,active.pid,'GradBefore native import fixture');first=native_record(file);validate(first,case);quit_app(active,active_log);active=None;active_log=None
             # The saved editable SIF must stand alone, with the actual imported source unavailable.
-            svg.rename(area/'source.svg.disabled');active,active_log,window=launch(file,area/'reopen-profile',OUT/(case+'-reopen.log'));reopened=OUT/(case+'-reopened.sif');save_as(reopened,active.pid);second=native_record(reopened);validate(second,case);assert first['gradients']==second['gradients'] and first['layerTypes']==second['layerTypes'];command('scrot',str(OUT/(case+'-reopened.png')));quit_app(active,active_log);active=None;active_log=None
+            svg.rename(area/'source.svg.disabled');active,active_log,window=launch(file,area/'reopen-profile',OUT/(case+'-reopen.log'));reopened=OUT/(case+'-reopened.sif');save_as(reopened,active.pid,file.name);second=native_record(reopened);validate(second,case);assert first['gradients']==second['gradients'] and first['layerTypes']==second['layerTypes'];command('scrot',str(OUT/(case+'-reopened.png')));quit_app(active,active_log);active=None;active_log=None
             render(file,case+'-native');render(reopened,case+'-reopened-native');records[case]={'saved':first,'reopened':second,'sourceRemovedBeforeReopen':True};(OUT/'native-structure.json').write_text(json.dumps(records,indent=2)+'\n')
         (OUT/'native-gui-result.json').write_text(json.dumps({'synfigVersion':'1.5.5','cases':records,'actions':progress,'scope':'Actual GUI SVG import into editable native groups/gradients, native save, fresh process reopen/save with source removed, then unchanged official CLI rendering. Synthetic fixtures only.'},indent=2)+'\n')
     except Exception:

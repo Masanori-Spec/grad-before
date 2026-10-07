@@ -2,7 +2,7 @@
 
 A small, offline, order-only repair for a specific Synfig SVG import limitation: a gradient may inherit shared stops only when its linear base appears earlier in the document. GradBefore places each base before its dependents inside one `defs` block. It retains every gradient’s original bytes, ID, links, stops and attributes, and leaves all non-gradient bytes and artwork order untouched.
 
-**Native-feasibility candidate.** The bounded source transformer and literal fixture tests pass locally. Actual Synfig GUI import/save/fresh reopen/render and browser pixel comparisons have not run yet. There is no product UI or completed compatibility claim. The hosted gate must reproduce the original failure and match the independently hand-ordered control before UI work proceeds.
+**Native-feasibility candidate.** The bounded source transformer and literal fixture tests pass locally. Actual Synfig GUI import has reproduced the original black-gradient failure and saved editable vector contents. The repaired/control comparison, fresh reopen/render and browser pixel acceptance remain pending. There is no product UI or completed compatibility claim. The hosted gate must reproduce the original failure and match the independently hand-ordered control before UI work proceeds.
 
 ## Source CLI
 
