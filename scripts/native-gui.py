@@ -34,12 +34,14 @@ def wait_dialog(pattern,pid):
     assert command('xdotool','getactivewindow').strip()==window,'Native dialog does not own focus'
     note('native-dialog',window=window,process=pid,properties=props);return window
 def accept_dialog(window,stem):
+    # GTK resolves the just-typed local path asynchronously before enabling acceptance.
+    time.sleep(1)
     assert command('xdotool','getactivewindow').strip()==window,'Native chooser lost focus'
     geometry=command('xdotool','getwindowgeometry','--shell',window);values=dict(line.split('=',1) for line in geometry.splitlines() if '=' in line);width=int(values['WIDTH']);height=int(values['HEIGHT']);assert 600<=width<=1600 and 300<=height<=1000
     # The observed GTK chooser places its explicit accept button at bottom right.
     # Use client-relative coordinates; do not rely on Return having a default response.
-    x,y=width-45,height-25;command('scrot',str(OUT/(stem+'-chooser-ready.png')));note('native-chooser-accept',window=window,x=x,y=y,coordinateSpace='client',screenshot=stem+'-chooser-ready.png')
-    command('xdotool','mousemove','--window',window,str(x),str(y));command('xdotool','click','1')
+    x,y=width-45,height-25;command('xdotool','mousemove','--window',window,str(x),str(y));pointer=command('xdotool','getmouselocation','--shell');command('scrot',str(OUT/(stem+'-chooser-ready.png')));note('native-chooser-accept',window=window,x=x,y=y,coordinateSpace='client',globalPointer=pointer,screenshot=stem+'-chooser-ready.png')
+    assert command('xdotool','getactivewindow').strip()==window,'Native chooser lost focus before acceptance';command('xdotool','click','1')
 def diagnose(stem):
     subprocess.run(['scrot',str(OUT/(stem+'.png'))],capture_output=True,timeout=10)
     listing=[{'id':window,'name':subprocess.run(['xdotool','getwindowname',window],capture_output=True,text=True).stdout.strip(),'properties':properties(window),'geometry':subprocess.run(['xdotool','getwindowgeometry','--shell',window],capture_output=True,text=True).stdout} for window in windows('.*')]
