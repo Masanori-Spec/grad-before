@@ -6,6 +6,8 @@ Runtime: saxes 6.0.0 (ISC and inherited notices), xmlchars 2.2.0 (MIT). Dependen
 
 Native/test-only tools: Synfig 1.5.5 (GPL-2.0-or-later), Inkscape and its SIF exporter (GPL), svgcleaner 0.9.5 (GPL-2.0), Scour 0.38.2 (Apache-2.0), SVGO 4.0.0 (MIT), Playwright 1.55.1 (Apache-2.0), Pillow and the Ubuntu display tools are fetched/installed externally for synthetic tests. No application, browser or optimizer binary/source bundle is included in the original-source archive or native evidence. These test tools do not grant a license to the original project code.
 
+Ubuntu's libarchive-tools is also a test-only archive reader. Its upstream [COPYING](https://github.com/libarchive/libarchive/blob/v3.6.0/COPYING) describes the main BSD two-clause terms and per-file exceptions. Neither its executable nor source is included here.
+
 ## saxes 6.0.0
 
 Upstream: https://github.com/lddubeau/saxes/blob/v6.0.0/LICENSE

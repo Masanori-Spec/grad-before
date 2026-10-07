@@ -1,0 +1,42 @@
+{
+  "appImageSHA256": "b85aabc26f690a0c150d2143c656c17f358b73abbedf8d01007f15a7a95740e9",
+  "bytes": 115539968,
+  "header32Hex": "7f454c4602010100414901000000000003003e0001000000e026000000000000",
+  "isoPrimaryDescriptorHex": "01434430303101",
+  "format": "type-1 ISO9660",
+  "inspection": "Read-only system libarchive listing; no vendor executable run locally",
+  "entries": 12336,
+  "symlinks": 255,
+  "regularBytes": 325409548,
+  "observedLexicallyExternalSymlinks": 0,
+  "vendorFiles": [
+    {
+      "path": "AppRun",
+      "bytes": 10560,
+      "sha256": "1b99b13078a0c8c42f2a388bf248742224292df2e110aacdb8ac5a517a3f922b"
+    },
+    {
+      "path": "synfigstudio.desktop",
+      "bytes": 134,
+      "sha256": "4f7f59893bf3a58ad907cba952d474058b4e154c1708f8b4076fddefc544b288"
+    },
+    {
+      "path": "usr/bin/launch.sh",
+      "bytes": 3760,
+      "sha256": "08ae6de91b9625ce265cfad3e7c66fb51493f91e997b66b7140dea4fbe182a2e"
+    },
+    {
+      "path": "usr/bin/synfigstudio.wrapper",
+      "bytes": 10259,
+      "sha256": "bcf7e7be36234b4883eb23387f50e30a4037ecab279b01af92eaaf06fb26bf04"
+    },
+    {
+      "path": "usr/etc/synfig_modules.cfg",
+      "bytes": 237,
+      "sha256": "b90ef79d2003caad1a5bc99f5441c41f1b0576579111346949e4c04e95b21201"
+    }
+  ],
+  "hardlinks": 1,
+  "observedSpecialModes": 0,
+  "observedNondirectoryParents": 0
+}

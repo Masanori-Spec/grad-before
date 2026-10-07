@@ -48,7 +48,7 @@ def validate(record,case):
         expected=[{'offset':0.0,'rgba':[1,0,0,1]},{'offset':0.5,'rgba':middle},{'offset':1.0,'rgba':[0,0,1,1]}]
         for g in record['gradients']:assert g['stops']==expected,(case,g)
 def launch(input_path,profile,log_path):
-    log=log_path.open('w');p=subprocess.Popen([rt.runtime()['launcher'],str(input_path)],cwd=ROOT,env=rt.environment(profile),stdout=log,stderr=subprocess.STDOUT)
+    log=log_path.open('w');p=subprocess.Popen([rt.runtime()['launcher'],str(input_path)],cwd=ROOT,env=rt.gui_environment(profile),stdout=log,stderr=subprocess.STDOUT)
     def find():
         assert p.poll() is None,'Synfig exited during launch'
         candidates=windows('Synfig|GradBefore')
@@ -74,6 +74,7 @@ def render(sif,stem):
 
 def main():
     assert os.environ.get('GITHUB_ACTIONS')=='true' and os.environ.get('DISPLAY'),'Hosted disposable-display gate only'
+    profile=WORK/'recorded-profile';choices=rt.gui_environment(profile);keys=['SYNFIG_USER_SETTINGS','XDG_CONFIG_HOME','XDG_CACHE_HOME','XDG_DATA_HOME','APPDIR','SYNFIG_ROOT','SYNFIG_MODULE_LIST','LD_LIBRARY_PATH','SYNFIG_GTK_THEME','SYNFIG_DISABLE_JACK','XDG_DATA_DIRS','GSETTINGS_SCHEMA_DIR','FONTCONFIG_PATH','MLT_DATA','MLT_REPOSITORY','GDK_PIXBUF_MODULE_FILE','LANG','LC_ALL'];(OUT/'native-runtime-choices.json').write_text(json.dumps({'gui':rt.runtime()['launcher'],'guiSHA256':rt.runtime()['launcherSHA256'],'inheritedHomeUnchanged':choices.get('HOME')==os.environ.get('HOME'),'profilePathNote':'Each launch substitutes its own disposable profile root','processOverrides':{k:choices[k] for k in keys if k in choices}},indent=2)+'\n');assert choices.get('HOME')==os.environ.get('HOME')
     version=subprocess.run([*rt.cli_command(),'--version'],env=rt.cli_environment(WORK/'version-profile'),capture_output=True,text=True,timeout=30);(OUT/'synfig-version.txt').write_text(version.stdout+version.stderr);assert version.returncode==0 and '1.5.5' in version.stdout+version.stderr
     cases={'original':ROOT/'fixtures/original.svg','repaired':OUT/'repaired.svg','manual-control':ROOT/'fixtures/manual-control.svg','altered-stop':OUT/'altered-stop.svg'};records={}
     wm_log=(OUT/'openbox.log').open('w');wm=subprocess.Popen(['openbox','--config-file','/etc/xdg/openbox/rc.xml'],stdout=wm_log,stderr=subprocess.STDOUT)
