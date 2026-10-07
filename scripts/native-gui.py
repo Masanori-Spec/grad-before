@@ -101,8 +101,9 @@ def launch(input_path,profile,log_path):
             try:p.wait(timeout=5)
             except subprocess.TimeoutExpired:p.kill()
         raise
-def quit_app(process,log):
-    key('ctrl+q');assert process.wait(timeout=30)==0,'Synfig did not exit cleanly';log.close()
+def quit_app(process,log,window):
+    activate(window);note('native-window-close',window=window,process=process.pid,method='Openbox Alt+F4 -> native delete-event shutdown')
+    key('alt+F4');code=process.wait(timeout=30);note('native-process-exit',process=process.pid,returncode=code);assert code==0,'Synfig did not exit cleanly';log.close()
 def render(sif,stem):
     target=OUT/(stem+'.png');assert not list(OUT.glob(stem+'*.png')),'Refuse existing native render targets';args=[*rt.cli_command(),str(sif),'-t','png','-o',str(target),'--time','0f','-w','560','-h','200','-T','1'];result=subprocess.run(args,env=rt.cli_environment(WORK/'cli-profile'),cwd=ROOT,capture_output=True,text=True,timeout=90);(OUT/(stem+'-render.log')).write_text(result.stdout+result.stderr);assert result.returncode==0,result.stderr
     matches=list(OUT.glob(stem+'*.png'));assert len(matches)==1,'Expected one native frame';actual=matches[0]
@@ -122,9 +123,9 @@ def main():
             area=WORK/'cases'/case;area.mkdir(parents=True,exist_ok=True);svg=area/'source.svg';shutil.copyfile(source,svg);blank=area/'blank.sif';shutil.copyfile(ROOT/'fixtures/blank.sif',blank)
             active,active_log,window=launch(blank,area/'profile',OUT/(case+'-gui.log'));note('launch-blank',case=case,window=window)
             key('ctrl+i');dialog=wait_dialog('^Please select files$',active.pid);key('ctrl+l');type_text(str(svg));accept_dialog(dialog,case+'-import');wait(lambda:dialog not in windows('.*'),'Native Import dialog did not close');time.sleep(1)
-            command('scrot',str(OUT/(case+'-imported.png')));file=OUT/(case+'.sif');save_as(file,active.pid,'GradBefore native import fixture');first=native_record(file);validate(first,case);quit_app(active,active_log);active=None;active_log=None
+            command('scrot',str(OUT/(case+'-imported.png')));file=OUT/(case+'.sif');save_as(file,active.pid,'GradBefore native import fixture');first=native_record(file);validate(first,case);quit_app(active,active_log,window);active=None;active_log=None
             # The saved editable SIF must stand alone, with the actual imported source unavailable.
-            svg.rename(area/'source.svg.disabled');active,active_log,window=launch(file,area/'reopen-profile',OUT/(case+'-reopen.log'));reopened=OUT/(case+'-reopened.sif');save_as(reopened,active.pid,file.name);second=native_record(reopened);validate(second,case);assert first['gradients']==second['gradients'] and first['layerTypes']==second['layerTypes'];command('scrot',str(OUT/(case+'-reopened.png')));quit_app(active,active_log);active=None;active_log=None
+            svg.rename(area/'source.svg.disabled');active,active_log,window=launch(file,area/'reopen-profile',OUT/(case+'-reopen.log'));reopened=OUT/(case+'-reopened.sif');save_as(reopened,active.pid,file.name);second=native_record(reopened);validate(second,case);assert first['gradients']==second['gradients'] and first['layerTypes']==second['layerTypes'];command('scrot',str(OUT/(case+'-reopened.png')));quit_app(active,active_log,window);active=None;active_log=None
             render(file,case+'-native');render(reopened,case+'-reopened-native');records[case]={'saved':first,'reopened':second,'sourceRemovedBeforeReopen':True};(OUT/'native-structure.json').write_text(json.dumps(records,indent=2)+'\n')
         (OUT/'native-gui-result.json').write_text(json.dumps({'synfigVersion':'1.5.5','cases':records,'actions':progress,'scope':'Actual GUI SVG import into editable native groups/gradients, native save, fresh process reopen/save with source removed, then unchanged official CLI rendering. Synthetic fixtures only.'},indent=2)+'\n')
     except Exception:
