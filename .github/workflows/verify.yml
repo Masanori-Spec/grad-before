@@ -1,0 +1,53 @@
+name: Actual Synfig import feasibility
+on: [push, workflow_dispatch]
+permissions:
+  contents: read
+defaults:
+  run:
+    shell: bash
+jobs:
+  actual-native-import:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install declared test dependencies
+        run: |
+          npm ci --ignore-scripts --no-audit --no-fund
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends xvfb xauth openbox xdotool scrot python3-pil python3-lxml python3-numpy python3-tinycss2 python3-cssselect scour inkscape
+      - name: Source and literal fixture checks
+        run: |
+          set -euo pipefail
+          npm test | tee evidence/unit-tests.txt
+          npm run fixtures
+          python3 -m py_compile scripts/*.py
+      - name: Verify official Synfig and optimizer test assets
+        run: |
+          python3 scripts/prepare-native.py
+          dpkg-query -W inkscape scour python3-scour python3-pil openbox xvfb xdotool > evidence/native-packages.txt
+      - name: Run actual optimizer configurations
+        run: node scripts/compare-optimizers.mjs
+      - name: Actual GUI import, save, fresh reopen and native render
+        run: xvfb-run -a -s '-screen 0 1600x1000x24' python3 scripts/native-gui.py
+      - name: Execute official Inkscape SIF alternative
+        run: xvfb-run -a -s '-screen 0 1600x1000x24' python3 scripts/compare-inkscape.py
+      - name: Independent browser SVG semantics
+        run: |
+          npx playwright install --with-deps chromium
+          npx playwright test
+          python3 scripts/compare-pixels.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: grad-before-native-evidence
+          path: |
+            evidence/
+            playwright-report/
+            test-results/
+          if-no-files-found: error
+          retention-days: 14
