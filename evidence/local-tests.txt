@@ -1,0 +1,56 @@
+
+> grad-before@0.1.0 test
+> node --test tests/*.test.mjs
+
+✔ literal hand-ordered control and dependency graph match without changing a gradient or artwork byte (24.943921ms)
+✔ already ordered output is byte-idempotent (13.329073ms)
+✔ Unicode, CRLF, comments, quote choices and BOM remain exact outside and inside moved blocks (7.379648ms)
+✔ plain SVG2 href and bounded static transforms preserve their spelling (4.961629ms)
+✔ reject cycle (0.944245ms)
+✔ reject missing dependency (2.79847ms)
+✔ reject radial base (0.862176ms)
+✔ reject external gradient (1.953917ms)
+✔ reject external paint (0.64843ms)
+✔ reject stylesheet (0.426733ms)
+✔ reject processing instruction (1.844523ms)
+✔ reject script (1.524045ms)
+✔ reject animation (2.133679ms)
+✔ reject event handler (0.655702ms)
+✔ reject foreign XML (0.211201ms)
+✔ reject DTD entities (0.282338ms)
+✔ reject duplicate gradient ID (2.653675ms)
+✔ reject duplicate artwork/stop ID (2.522508ms)
+✔ reject missing gradient ID (0.910743ms)
+✔ reject dual href (0.682998ms)
+✔ reject cross-defs reference (0.63972ms)
+✔ reject unknown defs child (2.568565ms)
+✔ reject own stops plus href (1.473357ms)
+✔ reject repeat spread (0.326079ms)
+✔ reject bounding-box gradient (1.730334ms)
+✔ reject implicit painted geometry (5.324636ms)
+✔ reject off-center radial focus (0.504389ms)
+✔ reject radial without base (0.549538ms)
+✔ reject percentage stops (0.355383ms)
+✔ reject unknown CSS (1.869307ms)
+✔ reject dynamic CSS (0.566126ms)
+✔ reject aliased href namespace (0.287538ms)
+✔ reject XML base (0.200845ms)
+✔ invalid UTF-8, oversized input and overlong dependency chains fail closed (18.520581ms)
+✔ missing references and changed stops cannot satisfy the literal preservation oracle (8.811878ms)
+✔ reject malformed or unbounded path M 1e9999,20 L 180,20 (4.656311ms)
+✔ reject malformed or unbounded path M 1e,20 L 180,20 (0.579463ms)
+✔ reject malformed or unbounded path M 1000001,0 L 10,10 (0.384592ms)
+✔ reject malformed or unbounded path M 0,0 L 1 (0.571281ms)
+✔ reject malformed or unbounded path M 0,0,,L 1,1 (3.638645ms)
+✔ reject malformed or unbounded path M 0,0 A 1 1 0 2 0 2 2 (0.521627ms)
+✔ reject malformed or unbounded path L 0 0 (0.604058ms)
+✔ compact valid path numbers, curves and separated arc flags remain byte-preserved (1.009838ms)
+✔ direct and indirect inherited-only gradient transforms reject, explicit painted override stays intact (4.379395ms)
+ℹ tests 44
+ℹ suites 0
+ℹ pass 44
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 428.718324

@@ -1,0 +1,3 @@
+import { open } from 'node:fs/promises';
+import { constants } from 'node:fs';
+export async function readBounded(path,limit){const file=await open(path,constants.O_RDONLY|(constants.O_NOFOLLOW??0)|(constants.O_NONBLOCK??0));try{const info=await file.stat();if(!info.isFile()||info.size>limit)throw Error('Expected bounded regular file');const chunks=[];let total=0;while(total<=limit){const buffer=Buffer.alloc(Math.min(65536,limit+1-total)),{bytesRead}=await file.read(buffer,0,buffer.length,total);if(!bytesRead)return Buffer.concat(chunks,total);total+=bytesRead;if(total>limit)throw Error('Input grew beyond limit');chunks.push(buffer.subarray(0,bytesRead));}throw Error('Input exceeds limit');}finally{await file.close();}}

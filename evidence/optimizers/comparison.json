@@ -1,0 +1,727 @@
+{
+  "sourceSHA256": "cd674ecd1e991e2092a6afb60fa3daff79e327877b3a3fbef864a77a0ed27272",
+  "original": {
+    "ids": [
+      "paintA",
+      "radialLeaf",
+      "bridgeB",
+      "sharedC",
+      "redStop",
+      "greenStop",
+      "blueStop",
+      "background",
+      "artwork",
+      "panelA",
+      "panelB",
+      "panelR"
+    ],
+    "gradients": [
+      {
+        "id": "paintA",
+        "kind": "linearGradient",
+        "href": "#bridgeB",
+        "stops": []
+      },
+      {
+        "id": "radialLeaf",
+        "kind": "radialGradient",
+        "href": "#sharedC",
+        "stops": []
+      },
+      {
+        "id": "bridgeB",
+        "kind": "linearGradient",
+        "href": "#sharedC",
+        "stops": []
+      },
+      {
+        "id": "sharedC",
+        "kind": "linearGradient",
+        "href": null,
+        "stops": [
+          {
+            "id": "redStop",
+            "offset": 0,
+            "color": "#ff0000",
+            "opacity": "1"
+          },
+          {
+            "id": "greenStop",
+            "offset": 0.5,
+            "color": "#00ff00",
+            "opacity": "1"
+          },
+          {
+            "id": "blueStop",
+            "offset": 1,
+            "color": "#0000ff",
+            "opacity": "1"
+          }
+        ]
+      }
+    ],
+    "paints": [
+      "paintA",
+      "bridgeB",
+      "radialLeaf"
+    ],
+    "dependencyOrdered": false
+  },
+  "results": [
+    {
+      "name": "svgo-default",
+      "command": {
+        "tool": "svgo",
+        "version": "4.0.0",
+        "options": {
+          "multipass": true,
+          "plugins": "preset-default"
+        }
+      },
+      "sha256": "068da1edd1db691317aac0c5afd9686d4e20b0aa4853eed6016964cc0659fdf3",
+      "bytes": 915,
+      "sameIds": false,
+      "sameEdges": false,
+      "sameGradientKinds": false,
+      "ids": [
+        "c",
+        "a",
+        "b",
+        "d"
+      ],
+      "gradients": [
+        {
+          "id": "c",
+          "kind": "linearGradient",
+          "href": "#a",
+          "stops": []
+        },
+        {
+          "id": "a",
+          "kind": "linearGradient",
+          "href": "#b",
+          "stops": []
+        },
+        {
+          "id": "b",
+          "kind": "linearGradient",
+          "href": null,
+          "stops": [
+            {
+              "id": null,
+              "offset": 0,
+              "color": "red",
+              "opacity": "1"
+            },
+            {
+              "id": null,
+              "offset": 0.5,
+              "color": "#0f0",
+              "opacity": "1"
+            },
+            {
+              "id": null,
+              "offset": 1,
+              "color": "#00f",
+              "opacity": "1"
+            }
+          ]
+        },
+        {
+          "id": "d",
+          "kind": "radialGradient",
+          "href": "#b",
+          "stops": []
+        }
+      ],
+      "paints": [
+        "c",
+        "a",
+        "d"
+      ],
+      "dependencyOrdered": false,
+      "potentialOrderOnlyAlternative": false
+    },
+    {
+      "name": "svgo-preserve-ids",
+      "command": {
+        "tool": "svgo",
+        "version": "4.0.0",
+        "options": {
+          "multipass": true,
+          "plugins": [
+            {
+              "name": "preset-default",
+              "params": {
+                "overrides": {
+                  "cleanupIds": false
+                }
+              }
+            }
+          ]
+        }
+      },
+      "sha256": "ee8a7fef05134f245782b7abbecb77c19f74a6089104819ea0836aac2994d2ab",
+      "bytes": 1107,
+      "sameIds": true,
+      "sameEdges": true,
+      "sameGradientKinds": true,
+      "ids": [
+        "paintA",
+        "bridgeB",
+        "sharedC",
+        "redStop",
+        "greenStop",
+        "blueStop",
+        "radialLeaf",
+        "background",
+        "artwork",
+        "panelA",
+        "panelB",
+        "panelR"
+      ],
+      "gradients": [
+        {
+          "id": "paintA",
+          "kind": "linearGradient",
+          "href": "#bridgeB",
+          "stops": []
+        },
+        {
+          "id": "bridgeB",
+          "kind": "linearGradient",
+          "href": "#sharedC",
+          "stops": []
+        },
+        {
+          "id": "sharedC",
+          "kind": "linearGradient",
+          "href": null,
+          "stops": [
+            {
+              "id": "redStop",
+              "offset": 0,
+              "color": "red",
+              "opacity": "1"
+            },
+            {
+              "id": "greenStop",
+              "offset": 0.5,
+              "color": "#0f0",
+              "opacity": "1"
+            },
+            {
+              "id": "blueStop",
+              "offset": 1,
+              "color": "#00f",
+              "opacity": "1"
+            }
+          ]
+        },
+        {
+          "id": "radialLeaf",
+          "kind": "radialGradient",
+          "href": "#sharedC",
+          "stops": []
+        }
+      ],
+      "paints": [
+        "paintA",
+        "bridgeB",
+        "radialLeaf"
+      ],
+      "dependencyOrdered": false,
+      "potentialOrderOnlyAlternative": false
+    },
+    {
+      "name": "svgo-sort-defs-only",
+      "command": {
+        "tool": "svgo",
+        "version": "4.0.0",
+        "options": {
+          "multipass": true,
+          "plugins": [
+            "sortDefsChildren"
+          ]
+        }
+      },
+      "sha256": "a26b8fa750041d9f461a457c406e7d3986cadcde315a490889bb01129bdbecfa",
+      "bytes": 1234,
+      "sameIds": true,
+      "sameEdges": true,
+      "sameGradientKinds": true,
+      "ids": [
+        "paintA",
+        "bridgeB",
+        "sharedC",
+        "redStop",
+        "greenStop",
+        "blueStop",
+        "radialLeaf",
+        "background",
+        "artwork",
+        "panelA",
+        "panelB",
+        "panelR"
+      ],
+      "gradients": [
+        {
+          "id": "paintA",
+          "kind": "linearGradient",
+          "href": "#bridgeB",
+          "stops": []
+        },
+        {
+          "id": "bridgeB",
+          "kind": "linearGradient",
+          "href": "#sharedC",
+          "stops": []
+        },
+        {
+          "id": "sharedC",
+          "kind": "linearGradient",
+          "href": null,
+          "stops": [
+            {
+              "id": "redStop",
+              "offset": 0,
+              "color": "#ff0000",
+              "opacity": "1"
+            },
+            {
+              "id": "greenStop",
+              "offset": 0.5,
+              "color": "#00ff00",
+              "opacity": "1"
+            },
+            {
+              "id": "blueStop",
+              "offset": 1,
+              "color": "#0000ff",
+              "opacity": "1"
+            }
+          ]
+        },
+        {
+          "id": "radialLeaf",
+          "kind": "radialGradient",
+          "href": "#sharedC",
+          "stops": []
+        }
+      ],
+      "paints": [
+        "paintA",
+        "bridgeB",
+        "radialLeaf"
+      ],
+      "dependencyOrdered": false,
+      "potentialOrderOnlyAlternative": false
+    },
+    {
+      "name": "scour-default",
+      "command": {
+        "tool": "scour",
+        "version": "0.38.2",
+        "args": []
+      },
+      "sha256": "b991b6957764ee38377745e29cae5f78c46ad8424ca7c49f30859729bbfa3ca2",
+      "bytes": 1109,
+      "sameIds": true,
+      "sameEdges": true,
+      "sameGradientKinds": true,
+      "ids": [
+        "paintA",
+        "radialLeaf",
+        "bridgeB",
+        "sharedC",
+        "redStop",
+        "greenStop",
+        "blueStop",
+        "background",
+        "artwork",
+        "panelA",
+        "panelB",
+        "panelR"
+      ],
+      "gradients": [
+        {
+          "id": "paintA",
+          "kind": "linearGradient",
+          "href": "#bridgeB",
+          "stops": []
+        },
+        {
+          "id": "radialLeaf",
+          "kind": "radialGradient",
+          "href": "#sharedC",
+          "stops": []
+        },
+        {
+          "id": "bridgeB",
+          "kind": "linearGradient",
+          "href": "#sharedC",
+          "stops": []
+        },
+        {
+          "id": "sharedC",
+          "kind": "linearGradient",
+          "href": null,
+          "stops": [
+            {
+              "id": "redStop",
+              "offset": 0,
+              "color": "#f00",
+              "opacity": "1"
+            },
+            {
+              "id": "greenStop",
+              "offset": 0.5,
+              "color": "#0f0",
+              "opacity": "1"
+            },
+            {
+              "id": "blueStop",
+              "offset": 1,
+              "color": "#00f",
+              "opacity": "1"
+            }
+          ]
+        }
+      ],
+      "paints": [
+        "paintA",
+        "bridgeB",
+        "radialLeaf"
+      ],
+      "dependencyOrdered": false,
+      "potentialOrderOnlyAlternative": false
+    },
+    {
+      "name": "scour-preserve-profile",
+      "command": {
+        "tool": "scour",
+        "version": "0.38.2",
+        "args": [
+          "--disable-simplify-colors",
+          "--disable-style-to-xml",
+          "--disable-group-collapsing",
+          "--keep-unreferenced-defs",
+          "--keep-editor-data"
+        ]
+      },
+      "sha256": "912db4a8a0e1dec6cbcd214e0526c7b62c0bf8662e7fbe25dc5282cd383302e3",
+      "bytes": 1139,
+      "sameIds": true,
+      "sameEdges": true,
+      "sameGradientKinds": true,
+      "ids": [
+        "paintA",
+        "radialLeaf",
+        "bridgeB",
+        "sharedC",
+        "redStop",
+        "greenStop",
+        "blueStop",
+        "background",
+        "artwork",
+        "panelA",
+        "panelB",
+        "panelR"
+      ],
+      "gradients": [
+        {
+          "id": "paintA",
+          "kind": "linearGradient",
+          "href": "#bridgeB",
+          "stops": []
+        },
+        {
+          "id": "radialLeaf",
+          "kind": "radialGradient",
+          "href": "#sharedC",
+          "stops": []
+        },
+        {
+          "id": "bridgeB",
+          "kind": "linearGradient",
+          "href": "#sharedC",
+          "stops": []
+        },
+        {
+          "id": "sharedC",
+          "kind": "linearGradient",
+          "href": null,
+          "stops": [
+            {
+              "id": "redStop",
+              "offset": 0,
+              "color": "#ff0000",
+              "opacity": "1"
+            },
+            {
+              "id": "greenStop",
+              "offset": 0.5,
+              "color": "#00ff00",
+              "opacity": "1"
+            },
+            {
+              "id": "blueStop",
+              "offset": 1,
+              "color": "#0000ff",
+              "opacity": "1"
+            }
+          ]
+        }
+      ],
+      "paints": [
+        "paintA",
+        "bridgeB",
+        "radialLeaf"
+      ],
+      "dependencyOrdered": false,
+      "potentialOrderOnlyAlternative": false
+    },
+    {
+      "name": "svgcleaner-default",
+      "command": {
+        "tool": "svgcleaner",
+        "version": "svgcleaner 0.9.5",
+        "binarySHA256": "15d8b7d54b73059a9a63ab3d5ca8201cd30c2f6fc59fc068f7bd6c85e6a22420",
+        "args": []
+      },
+      "sha256": "c806315cded4a448b98226af53aad8f072b5b9d1b885d56c969729d587998321",
+      "bytes": 782,
+      "sameIds": false,
+      "sameEdges": false,
+      "sameGradientKinds": false,
+      "ids": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "gradients": [
+        {
+          "id": "a",
+          "kind": "linearGradient",
+          "href": "#c",
+          "stops": []
+        },
+        {
+          "id": "b",
+          "kind": "radialGradient",
+          "href": "#d",
+          "stops": []
+        },
+        {
+          "id": "c",
+          "kind": "linearGradient",
+          "href": "#d",
+          "stops": []
+        },
+        {
+          "id": "d",
+          "kind": "linearGradient",
+          "href": null,
+          "stops": [
+            {
+              "id": null,
+              "offset": 0,
+              "color": "#f00",
+              "opacity": "1"
+            },
+            {
+              "id": null,
+              "offset": 0.5,
+              "color": "#0f0",
+              "opacity": "1"
+            },
+            {
+              "id": null,
+              "offset": 1,
+              "color": "#00f",
+              "opacity": "1"
+            }
+          ]
+        }
+      ],
+      "paints": [
+        "a",
+        "c",
+        "b"
+      ],
+      "dependencyOrdered": false,
+      "potentialOrderOnlyAlternative": false
+    },
+    {
+      "name": "svgcleaner-no-defaults",
+      "command": {
+        "tool": "svgcleaner",
+        "version": "svgcleaner 0.9.5",
+        "binarySHA256": "15d8b7d54b73059a9a63ab3d5ca8201cd30c2f6fc59fc068f7bd6c85e6a22420",
+        "args": [
+          "--no-defaults",
+          "--allow-bigger-file"
+        ]
+      },
+      "sha256": "dffdd4a64a908a1dee96d3899ca7ea3e7e40f0900873ed6ecda86fc8e9c48349",
+      "bytes": 1221,
+      "sameIds": true,
+      "sameEdges": true,
+      "sameGradientKinds": true,
+      "ids": [
+        "paintA",
+        "radialLeaf",
+        "bridgeB",
+        "sharedC",
+        "redStop",
+        "greenStop",
+        "blueStop",
+        "background",
+        "artwork",
+        "panelA",
+        "panelB",
+        "panelR"
+      ],
+      "gradients": [
+        {
+          "id": "paintA",
+          "kind": "linearGradient",
+          "href": "#bridgeB",
+          "stops": []
+        },
+        {
+          "id": "radialLeaf",
+          "kind": "radialGradient",
+          "href": "#sharedC",
+          "stops": []
+        },
+        {
+          "id": "bridgeB",
+          "kind": "linearGradient",
+          "href": "#sharedC",
+          "stops": []
+        },
+        {
+          "id": "sharedC",
+          "kind": "linearGradient",
+          "href": null,
+          "stops": [
+            {
+              "id": "redStop",
+              "offset": 0,
+              "color": "#ff0000",
+              "opacity": "1"
+            },
+            {
+              "id": "greenStop",
+              "offset": 0.5,
+              "color": "#00ff00",
+              "opacity": "1"
+            },
+            {
+              "id": "blueStop",
+              "offset": 1,
+              "color": "#0000ff",
+              "opacity": "1"
+            }
+          ]
+        }
+      ],
+      "paints": [
+        "paintA",
+        "bridgeB",
+        "radialLeaf"
+      ],
+      "dependencyOrdered": false,
+      "potentialOrderOnlyAlternative": false
+    },
+    {
+      "name": "svgcleaner-preserve-graph",
+      "command": {
+        "tool": "svgcleaner",
+        "version": "svgcleaner 0.9.5",
+        "binarySHA256": "15d8b7d54b73059a9a63ab3d5ca8201cd30c2f6fc59fc068f7bd6c85e6a22420",
+        "args": [
+          "--remove-unreferenced-ids=no",
+          "--trim-ids=no",
+          "--merge-gradients=no",
+          "--regroup-gradient-stops=no",
+          "--allow-bigger-file"
+        ]
+      },
+      "sha256": "969c6011239c30c33ad4a2d7b82ff78140a0ca44867c56a4c7b60fdd4061f7c1",
+      "bytes": 953,
+      "sameIds": true,
+      "sameEdges": true,
+      "sameGradientKinds": true,
+      "ids": [
+        "paintA",
+        "radialLeaf",
+        "bridgeB",
+        "sharedC",
+        "redStop",
+        "greenStop",
+        "blueStop",
+        "background",
+        "artwork",
+        "panelA",
+        "panelB",
+        "panelR"
+      ],
+      "gradients": [
+        {
+          "id": "paintA",
+          "kind": "linearGradient",
+          "href": "#bridgeB",
+          "stops": []
+        },
+        {
+          "id": "radialLeaf",
+          "kind": "radialGradient",
+          "href": "#sharedC",
+          "stops": []
+        },
+        {
+          "id": "bridgeB",
+          "kind": "linearGradient",
+          "href": "#sharedC",
+          "stops": []
+        },
+        {
+          "id": "sharedC",
+          "kind": "linearGradient",
+          "href": null,
+          "stops": [
+            {
+              "id": "redStop",
+              "offset": 0,
+              "color": "#f00",
+              "opacity": "1"
+            },
+            {
+              "id": "greenStop",
+              "offset": 0.5,
+              "color": "#0f0",
+              "opacity": "1"
+            },
+            {
+              "id": "blueStop",
+              "offset": 1,
+              "color": "#00f",
+              "opacity": "1"
+            }
+          ]
+        }
+      ],
+      "paints": [
+        "paintA",
+        "bridgeB",
+        "radialLeaf"
+      ],
+      "dependencyOrdered": false,
+      "potentialOrderOnlyAlternative": false
+    }
+  ],
+  "scope": "Actual fixed-fixture outputs. Ordered plus preserved IDs/shared graph is a potential existing solution requiring reassessment. Browser rendering is a separate gate; source inspection is not execution."
+}

@@ -1,0 +1,58 @@
+{
+  "schema": "GradBefore/1",
+  "changed": true,
+  "beforeOrder": [
+    "paintA",
+    "radialLeaf",
+    "bridgeB",
+    "sharedC"
+  ],
+  "afterOrder": [
+    "sharedC",
+    "bridgeB",
+    "paintA",
+    "radialLeaf"
+  ],
+  "dependencies": [
+    {
+      "id": "paintA",
+      "base": "bridgeB"
+    },
+    {
+      "id": "radialLeaf",
+      "base": "sharedC"
+    },
+    {
+      "id": "bridgeB",
+      "base": "sharedC"
+    }
+  ],
+  "moved": [
+    {
+      "id": "sharedC",
+      "from": 3,
+      "to": 0
+    },
+    {
+      "id": "bridgeB",
+      "from": 2,
+      "to": 1
+    },
+    {
+      "id": "paintA",
+      "from": 0,
+      "to": 2
+    },
+    {
+      "id": "radialLeaf",
+      "from": 1,
+      "to": 3
+    }
+  ],
+  "preserved": {
+    "gradientBlocks": 4,
+    "artworkPaintReferences": 3,
+    "bytes": 1316
+  },
+  "scope": "Only complete gradient blocks are reordered inside one defs. Other bytes, IDs, hrefs, stops and artwork order are unchanged. Static bounded profile; not a general SVG sanitizer or fidelity converter."
+}

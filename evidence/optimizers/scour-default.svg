@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="560" height="200" viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <title>Shared gradient order · 日本語 🧭</title>
+ <defs>
+  <linearGradient id="paintA" x1="20" x2="180" y1="20" y2="20" gradientUnits="userSpaceOnUse" xlink:href="#bridgeB"/>
+  <radialGradient id="radialLeaf" cx="460" cy="100" r="80" gradientUnits="userSpaceOnUse" xlink:href="#sharedC"/>
+  <linearGradient id="bridgeB" x1="200" x2="360" y1="20" y2="20" gradientUnits="userSpaceOnUse" xlink:href="#sharedC"/>
+  <linearGradient id="sharedC">
+   <stop id="redStop" stop-color="#f00" offset="0"/>
+   <stop id="greenStop" stop-color="#0f0" offset=".5"/>
+   <stop id="blueStop" stop-color="#00f" offset="1"/>
+  </linearGradient>
+ </defs>
+ <path id="background" d="m0 0h560v200h-560z" fill="#fff"/>
+ <g id="artwork">
+  <path id="panelA" d="m20 20h160v160h-160z" fill="url(#paintA)"/>
+  <path id="panelB" d="m200 20h160v160h-160z" fill="url(#bridgeB)"/>
+  <path id="panelR" d="m380 20h160v160h-160z" fill="url(#radialLeaf)"/>
+ </g>
+</svg>

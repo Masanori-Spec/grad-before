@@ -1,0 +1,58 @@
+{
+  "repository": "synfig/synfig",
+  "version": "1.5.5",
+  "commit": "79bf708e2483cba678fc93f0ecf48b2178263795",
+  "sources": [
+    {
+      "path": "synfig-core/src/modules/mod_svg/svg_parser.cpp",
+      "gitBlobSHA": "4ecb3339990783933f7bbe4e70188ba3455555eb"
+    },
+    {
+      "path": "synfig-core/src/modules/mod_svg/layer_svg.cpp",
+      "gitBlobSHA": "64eea7701e006239f47627a8aea32921a201843f"
+    },
+    {
+      "path": "synfig-core/src/modules/mod_svg/main.cpp",
+      "gitBlobSHA": "88f94caac6a63054225609cf89c9cb146b653d37"
+    },
+    {
+      "path": "synfig-studio/src/synfigapp/canvasinterface.cpp",
+      "gitBlobSHA": "f66a68b4c1f9d3968c0ce1ca833238ac772c3c1f"
+    },
+    {
+      "path": "synfig-studio/src/gui/app.cpp",
+      "gitBlobSHA": "591b68048abf64b8a487f5a77f6d85b945cce2e3"
+    },
+    {
+      "path": "synfig-core/src/tool/joblistprocessor.cpp",
+      "gitBlobSHA": "45531ac49d909cf1cf073bb23e2bcf30c14a212f"
+    },
+    {
+      "path": "synfig-core/src/tool/optionsprocessor.cpp",
+      "gitBlobSHA": "d6d2e2d87ae1e232e1bfef9d0dc997760e726d69"
+    },
+    {
+      "path": "autobuild/fedora-crosscompile-linux.sh",
+      "gitBlobSHA": "f6aed6f6455266f349428eb39bce3b9d58bb4786"
+    },
+    {
+      "path": "synfig-studio/src/synfigapp/main.cpp",
+      "gitBlobSHA": "4c5a3fb108f77fe95f0812931c84d6231a1a0a9e"
+    }
+  ],
+  "appImage": {
+    "assetId": 374823197,
+    "name": "SynfigStudio-1.5.5-2026.03.15-linux64-79bf7.appimage",
+    "bytes": 115539968,
+    "sha256": "b85aabc26f690a0c150d2143c656c17f358b73abbedf8d01007f15a7a95740e9",
+    "url": "https://github.com/synfig/synfig/releases/download/v1.5.5/SynfigStudio-1.5.5-2026.03.15-linux64-79bf7.appimage"
+  },
+  "svgcleaner": {
+    "version": "0.9.5",
+    "assetId": 6795773,
+    "bytes": 812158,
+    "sha256": "23b97f4915ff8334a47cce4933f2642fff57beefa21f99a6369ec3ba161cb8ff",
+    "hashSource": "Locally observed SHA-256 of the official GitHub release asset; the release API has no digest for this older asset",
+    "url": "https://github.com/RazrFalcon/svgcleaner/releases/download/v0.9.5/svgcleaner_linux_x86_64_0.9.5.tar.gz"
+  }
+}

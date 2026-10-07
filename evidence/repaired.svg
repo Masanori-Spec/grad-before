@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="560" height="200" viewBox="0 0 560 200">
+  <title>Shared gradient order · 日本語 🧭</title>
+  <defs>
+    <linearGradient id="sharedC">
+      <stop id="redStop" offset="0" style="stop-color:#ff0000;stop-opacity:1"/>
+      <stop id="greenStop" offset="0.5" style="stop-color:#00ff00;stop-opacity:1"/>
+      <stop id="blueStop" offset="1" style="stop-color:#0000ff;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="bridgeB" xlink:href="#sharedC" gradientUnits="userSpaceOnUse" x1="200" y1="20" x2="360" y2="20"/>
+    <linearGradient id="paintA" xlink:href="#bridgeB" gradientUnits="userSpaceOnUse" x1="20" y1="20" x2="180" y2="20"/>
+    <radialGradient id="radialLeaf" xlink:href="#sharedC" gradientUnits="userSpaceOnUse" cx="460" cy="100" r="80" fx="460" fy="100"/>
+  </defs>
+  <path id="background" d="M 0,0 L 560,0 L 560,200 L 0,200 Z" fill="#ffffff"/>
+  <g id="artwork" stroke="none">
+    <path id="panelA" d="M 20,20 L 180,20 L 180,180 L 20,180 Z" fill="url(#paintA)"/>
+    <path id="panelB" d="M 200,20 L 360,20 L 360,180 L 200,180 Z" fill="url(#bridgeB)"/>
+    <path id="panelR" d="M 380,20 L 540,20 L 540,180 L 380,180 Z" fill="url(#radialLeaf)"/>
+  </g>
+</svg>

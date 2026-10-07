@@ -1,0 +1,10 @@
+{
+  "name": "grad-before",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Bounded order-only SVG gradient dependency repair for Synfig imports",
+  "scripts": {"test":"node --test tests/*.test.mjs","fixtures":"node scripts/generate-fixtures.mjs"},
+  "dependencies": {"saxes":"6.0.0"},
+  "devDependencies": {"@playwright/test":"1.55.1","svgo":"4.0.0"}
+}
