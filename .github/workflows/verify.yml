@@ -34,8 +34,10 @@ jobs:
       - name: Run actual optimizer configurations
         run: node scripts/compare-optimizers.mjs
       - name: Actual GUI import, save, fresh reopen and native render
-        run: xvfb-run -a -s '-screen 0 1600x1000x24' python3 scripts/native-gui.py
-      - name: Execute official Inkscape SIF alternative
+        run: |
+          xvfb-run -a -s '-screen 0 1600x1000x24' python3 scripts/native-gui.py
+          python3 scripts/compare-pixels.py --native-only
+      - name: Measure installed Inkscape SIF alternative
         run: xvfb-run -a -s '-screen 0 1600x1000x24' python3 scripts/compare-inkscape.py
       - name: Independent browser SVG semantics
         run: |
